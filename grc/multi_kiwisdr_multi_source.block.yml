@@ -1,0 +1,57 @@
+id: multi_kiwisdr_multi_source
+label: KiwiSDR Multi-Source (TDoA)
+category: '[Multi-Coherent KiwiSDR]'
+
+parameters:
+-   id: hosts_csv
+    label: KiwiSDR Hosts (CSV)
+    dtype: string
+    default: '"kiwi1.example.com,kiwi2.example.com,kiwi3.example.com"'
+-   id: num_ch
+    label: Number of Channels
+    dtype: int
+    default: '3'
+-   id: port
+    label: Port
+    dtype: int
+    default: '8073'
+-   id: freq_mhz
+    label: Frequency (MHz)
+    dtype: real
+    default: '9.996'
+-   id: bandwidth_hz
+    label: Bandwidth (Hz)
+    dtype: int
+    default: '10000'
+
+outputs:
+-   domain: stream
+    dtype: complex
+    multiplicity: ${num_ch}
+
+templates:
+    imports: from multi_kiwisdr import KiwiMultiSource
+    make: |-
+        KiwiMultiSource(
+            hosts_csv=${hosts_csv},
+            num_ch=${num_ch},
+            port=${port},
+            freq_mhz=${freq_mhz},
+            bandwidth_hz=${bandwidth_hz}
+        )
+
+documentation: |-
+    Multi-Coherent KiwiSDR — N GPS-synchronized IQ streams for TDoA.
+
+    Connects to N KiwiSDR receivers in parallel, outputs N complex64 streams
+    aligned via GPS timestamps ('rx_time' stream tags, UHD format).
+
+    hosts_csv: comma-separated list, e.g. "kiwi1.example.com,kiwi2.example.com"
+    num_ch: must equal number of hosts in the CSV list
+
+    Install the Python module first (with the same Python GNU Radio uses):
+        pip install .
+
+    Requires: pip install websockets numpy
+
+file_format: 1

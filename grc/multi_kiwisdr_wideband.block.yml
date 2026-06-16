@@ -1,0 +1,62 @@
+id: multi_kiwisdr_wideband
+label: KiwiSDR Wideband
+category: '[Multi-Coherent KiwiSDR]'
+
+parameters:
+-   id: host
+    label: KiwiSDR Host
+    dtype: string
+    default: '"kiwisdr.example.com"'
+-   id: port
+    label: Port
+    dtype: int
+    default: '8073'
+-   id: center_mhz
+    label: Center Frequency (MHz)
+    dtype: real
+    default: '9.996'
+-   id: num_slots
+    label: Number of Slots
+    dtype: int
+    default: '3'
+    options: ['2', '3', '4']
+    option_labels: ['2 slots (~22 kHz)', '3 slots (~29 kHz)', '4 slots (~36 kHz)']
+-   id: slot_bw_hz
+    label: Slot Bandwidth (Hz)
+    dtype: int
+    default: '10000'
+-   id: overlap_hz
+    label: Slot Overlap (Hz)
+    dtype: int
+    default: '1000'
+
+outputs:
+-   domain: stream
+    dtype: complex
+
+templates:
+    imports: from multi_kiwisdr import KiwiWidebandSource
+    make: |-
+        KiwiWidebandSource(
+            host=${host},
+            port=${port},
+            center_mhz=${center_mhz},
+            num_slots=${num_slots},
+            slot_bw_hz=${slot_bw_hz},
+            overlap_hz=${overlap_hz}
+        )
+
+documentation: |-
+    KiwiSDR Wideband — frequency-stitched IQ from multiple slots on one receiver.
+
+    Opens num_slots simultaneous connections to one KiwiSDR, stitches them
+    via FFT overlap-add into a single wideband IQ stream.
+
+    Example: center=9.996 MHz, 3 slots, 10 kHz each → ~27 kHz total BW
+
+    Install the Python module first (with the same Python GNU Radio uses):
+        pip install .
+
+    Requires: pip install websockets numpy
+
+file_format: 1

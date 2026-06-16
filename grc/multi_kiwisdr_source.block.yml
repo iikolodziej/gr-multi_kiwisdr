@@ -1,0 +1,60 @@
+id: multi_kiwisdr_source
+label: KiwiSDR Source
+category: '[Multi-Coherent KiwiSDR]'
+
+parameters:
+-   id: host
+    label: KiwiSDR Host
+    dtype: string
+    default: '"kiwisdr.example.com"'
+-   id: port
+    label: Port
+    dtype: int
+    default: '8073'
+-   id: freq_mhz
+    label: Frequency (MHz)
+    dtype: real
+    default: '9.996'
+-   id: bandwidth_hz
+    label: Bandwidth (Hz)
+    dtype: int
+    default: '10000'
+-   id: agc_on
+    label: AGC
+    dtype: bool
+    default: 'True'
+    options: ['True', 'False']
+    option_labels: ['On', 'Off']
+-   id: man_gain
+    label: Manual Gain (dB)
+    dtype: int
+    default: '50'
+
+outputs:
+-   domain: stream
+    dtype: complex
+
+templates:
+    imports: from multi_kiwisdr import KiwiSDRSource
+    make: |-
+        KiwiSDRSource(
+            host=${host},
+            port=${port},
+            freq_mhz=${freq_mhz},
+            bandwidth_hz=${bandwidth_hz},
+            agc_on=${agc_on},
+            man_gain=${man_gain}
+        )
+
+documentation: |-
+    KiwiSDR WebSocket IQ source (gr-multi_kiwisdr).
+
+    Connects to a KiwiSDR receiver and provides complex64 IQ at 12 kSps.
+    GPS timestamps emitted as 'rx_time' stream tags (UHD format).
+
+    Install the Python module first (with the same Python GNU Radio uses):
+        pip install .
+
+    Requires: pip install websockets numpy
+
+file_format: 1

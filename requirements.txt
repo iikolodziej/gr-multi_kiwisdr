@@ -1,0 +1,4 @@
+# Runtime dependencies (standalone use, without GNU Radio).
+# For GRC blocks install GNU Radio >= 3.10 separately (e.g. via radioconda).
+websockets>=10.0
+numpy>=1.21
